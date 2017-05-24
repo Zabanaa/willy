@@ -1,3 +1,5 @@
+#!/home/zabana/projects/willy/ENV__willy/bin/python
+
 import csv
 import os
 import requests
@@ -121,6 +123,7 @@ else:
     with open("startups.csv", "r") as startups_file:
 
         all_startups = csv.reader(startups_file)
+        print("Scraping Jobs ...")
 
         for startup in all_startups:
 
@@ -130,31 +133,36 @@ else:
 
             try:
                 startup_soup = soupify_website(site_url=startup_site)
-                print("Scraping {} in {}".format(startup_name, startup_city))
+                # print("Scraping {} in {}".format(startup_name, startup_city))
             except requests.exceptions.ConnectionError:
-                print(colored("Not reachable, skipping ...\n", "grey"))
+                # print(colored("Not reachable, skipping ...\n", "grey"))
                 continue
             except Exception as e:
-                print("There's something wrong with this website")
+                # print("There's something wrong with this website")
                 continue
 
             has_open_jobs, jobs_page = startup_has_open_jobs(startup_soup)
 
             if not has_open_jobs:
-                print(colored("Not hiring, skipping ...\n", "grey"))
                 continue
 
             if jobs_page.startswith("/"):
                 jobs_page = "{}{}".format(startup_site, jobs_page)
 
-            jobs_page_soup          = soupify_website(site_url=jobs_page)
+            try:
+                jobs_page_soup          = soupify_website(site_url=jobs_page)
+                pass
+            except requests.exceptions.MissingSchema:
+                # jobs page does not start with / ex: jobs.html instead of jobs.html
+                jobs_page = "{}/{}".format(startup_site, jobs_page)
+                jobs_page_soup          = soupify_website(site_url=jobs_page)
+
             hiring_swd, job_title   = startup_is_hiring_software_devs(jobs_page_soup)
 
             if not hiring_swd:
-                print(colored("Not hiring devs. skipping ...\n", "grey"))
                 continue
 
-            message = "{} is hiring ! Job Title: {}".format(startup_name, job_title)
-            print(colored(message, "green"))
+            message = "{} is hiring software devs ! Job title: {}"
+            print(colored(message.format(startup_name, job_title), "green"))
 
         startups_file.close()
