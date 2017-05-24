@@ -122,7 +122,8 @@ if not os.path.exists("./startups.csv"):
 else:
     with open("startups.csv", "r") as startups_file:
 
-        all_startups = csv.reader(startups_file)
+        all_startups    = csv.reader(startups_file)
+        hiring_startups = 0
         print("Scraping Jobs ...")
 
         for startup in all_startups:
@@ -164,5 +165,7 @@ else:
 
             message = "{} is hiring software devs ! Job title: {}"
             print(colored(message.format(startup_name, job_title), "green"))
+            hiring_startups += 1
 
         startups_file.close()
+        print("A total of {} startups are actively looking for software developers".format(hiring_startups))
