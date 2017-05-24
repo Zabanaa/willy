@@ -1,4 +1,5 @@
 ENV__willy
+*.log
 *.csv
 *.pyc
 
