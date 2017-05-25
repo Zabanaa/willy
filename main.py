@@ -1,4 +1,5 @@
 #!/home/zabana/projects/willy/ENV__willy/bin/python
+
 import csv
 import os
 from helpers import *
@@ -9,6 +10,8 @@ def build_startups_list():
                 "sao-paulo", "stockholm", "sydney", "toronto",
                 "vancouver" ]
 
+    startups_list = []
+
     for city in cities:
         website     = "http://{}.startups-list.com".format(city)
 
@@ -18,17 +21,26 @@ def build_startups_list():
         print("Getting startups info ...")
         startups    = get_all_startups(soup, city)
 
-        print("Saving startups info to file ...")
-        save_startups_info_to_csv(startups)
-        print("Info Saved")
+        startups_list.append(startups)
+        print("Done !")
         print("")
+
+    print("Saving startupsinfo ...")
+    for city_startups in startups_list:
+
+        for startup in city_startups:
+            startup_name = startup[0]
+            save_startups_info_to_csv(startup, "startups.csv")
+            print("{} saved.".format(startup_name))
 
 def get_startup_jobs():
 
     with open("startups.csv", "r") as startups_file:
 
-        all_startups    = csv.reader(startups_file)
-        hiring_startups = 0
+        all_startups        = csv.reader(startups_file)
+        hiring_startups     = 0
+        google_sheet_index  = 1
+
         print("Scraping Jobs ...")
 
         for startup in all_startups:
@@ -59,6 +71,10 @@ def get_startup_jobs():
                 # jobs page does not start with / ex: jobs.html instead of jobs.html
                 jobs_page = "{}/{}".format(startup_site, jobs_page)
                 jobs_page_soup          = soupify_website(site_url=jobs_page)
+            except requests.exceptions.ConnectionError:
+                error = "Could not connect to {}. URL: {}".format(startup_name, jobs_page)
+                print(colored(error, "red"))
+                continue
 
             hiring_swd, job_title   = startup_is_hiring_software_devs(jobs_page_soup)
 
@@ -67,6 +83,10 @@ def get_startup_jobs():
 
             message = "{} is hiring software devs ! Job title: {}"
             print(colored(message.format(startup_name, job_title), "green"))
+
+            hiring_startup_info = [startup_city, startup_name, job_title, jobs_page]
+
+            save_startup_to_file(hiring_startup_info, "hiring_startups.csv")
             hiring_startups += 1
 
         startups_file.close()
