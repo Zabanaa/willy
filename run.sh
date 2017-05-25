@@ -22,7 +22,12 @@ fi
 # Remove pkg resource package from requirements.txt
 echo "[log] Removing pkg-resources package from requirements.txt."
 cd "$WORKDIR"
-grep -v "pkg-resources" "$REQUIREMENTS_FILE" | tee "$REQUIREMENTS_FILE"
+grep -v "pkg-resources" requirements.txt > requirements_new.txt
+
+# Temporary hack until I get tee to fuckin work properly
+rm requirements.txt
+mv requirements_new.txt requirements.txt
+
 cd ~
 echo "[log] Package successfully removed."
 
