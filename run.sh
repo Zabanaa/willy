@@ -1,26 +1,36 @@
 #!/bin/bash
 
-# If the virutalenv folder does not exist
-# create it, and activate it
+WORKDIR=/home/zabana/projects/willy
+
+# If the virutalenv folder does not exist, create and activate it.
 if [[ ! -d "./ENV__willy" ]]; then
-    virtualenv -p python3.5 ENV__willy
-
-    # Activate virtualenv
-    source ./ENV_willy/bin/activate
-
+    echo "[log] Creating virtualenv and activating it ..."
+    cd "$WORKDIR"; virtualenv -p python3.5 ENV__willy; source ENV_willy/bin/activate; cd ~
+    echo "[log] Virtualenv successfully created and activated"
 fi
 
 # If the virtual env is not active, activate it.
 if [[ -z "$VIRTUAL_ENV" ]]; then
-    # Activate virtualenv
+    echo "[log] Virtualenv is not active. Activating it ..."
     source ./ENV_willy/bin/activate
+    echo "[log] Virtualenv is now active !"
 fi
 
 # Remove pkg resource package from requirements.txt
+echo "[log] Removing pkg-resources package from requirements.txt."
+cd "$WORKDIR"
 grep -v "pkg-resources" requirements.txt | tee requirements.txt
+cd ~
+echo "[log] Package successfully removed."
 
 # pull down dependencies
+echo "[log] Pulling down dependencies ..."
+cd "$WORKDIR"
 pip install -r requirements.txt
+cd ~
+echo "[log] Dependencies downloaded !"
 
 # nohup the shit out of the app
+echo "[log] Running Script ... "
+cd "$WORKDIR"
 nohup python -u main.py > startups.log &
