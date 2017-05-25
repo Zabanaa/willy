@@ -15,18 +15,14 @@ def soupify_website(site_url=None):
 def get_all_startups(soup, city):
 
     startups_list   = soup.find_all("div", class_="startup")
-    startups        = []
+    all_startups        = []
 
     for startup in startups_list:
         startup_name    = startup["data-name"]
         startup_url     = startup["data-href"]
-        startups.append({
-            "name": startup_name,
-            "url": startup_url,
-            "location": city
-        })
+        all_startups.append([startup_name, startup_url, city])
 
-    return startups
+    return all_startups
 
 def startup_has_open_jobs(soup):
 
@@ -77,19 +73,12 @@ def startup_is_hiring_software_devs(soup):
     else:
         return HiringSWD(hiring=False, job_title=job_title)
 
-def save_startups_info_to_csv(startups):
+def save_startups_info_to_csv(startup_info, file):
 
-    with open("startups.csv", "a") as startup_file:
+    with open(file, "a") as startup_file:
 
         writer  = csv.writer(startup_file)
-
-        for startup in startups:
-
-            startup_name = startup.get("name")
-            startup_url  = startup.get("url")
-            startup_city = startup.get("location")
-
-            writer.writerow([startup_name, startup_url, startup_city])
+        writer.writerow(startup_info)
 
     startup_file.close()
     return True
