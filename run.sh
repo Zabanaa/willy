@@ -6,7 +6,7 @@ REQUIREMENTS_FILE=$WORKDIR/requirements.txt
 # If the virutalenv folder does not exist, create and activate it.
 if [[ ! -d "./ENV__willy" ]]; then
     echo "[log] Creating virtualenv and activating it ..."
-    cd "$WORKDIR"; virtualenv -p python3.5 ENV__willy; source $WORKDIR/ENV_willy/bin/activate; cd ~
+    cd "$WORKDIR"; virtualenv -p python3.5 ENV__willy; source ENV__willy/bin/activate; cd ~
     echo "[log] Virtualenv successfully created and activated"
 fi
 
@@ -14,7 +14,7 @@ fi
 if [[ -z "$VIRTUAL_ENV" ]]; then
     echo "[log] Virtualenv is not active. Activating it ..."
     cd "$WORKDIR"
-    source ENV_willy/bin/activate
+    source ENV__willy/bin/activate
     cd ~
     echo "[log] Virtualenv is now active !"
 fi
