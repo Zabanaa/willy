@@ -6,14 +6,14 @@ if [[ -d "./ENV__willy" ]]; then
     virtualenv -p python3.5 ENV__willy
 
     # Activate virtualenv
-    source ENV_willy/bin/activate
+    source ./ENV_willy/bin/activate
 
 fi
 
 # If the virtual env is not active, activate it.
 if [[ -z "$VIRTUAL_ENV" ]]; then
     # Activate virtualenv
-    source ENV_willy/bin/activate
+    source ./ENV_willy/bin/activate
 fi
 
 # Remove pkg resource package from requirements.txt
