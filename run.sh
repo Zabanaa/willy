@@ -2,7 +2,7 @@
 
 # If the virutalenv folder does not exist
 # create it, and activate it
-if [[ -d "./ENV__willy" ]]; then
+if [[ ! -d "./ENV__willy" ]]; then
     virtualenv -p python3.5 ENV__willy
 
     # Activate virtualenv
