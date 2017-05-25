@@ -86,7 +86,7 @@ def get_startup_jobs():
 
             hiring_startup_info = [startup_city, startup_name, job_title, jobs_page]
 
-            save_startup_to_file(hiring_startup_info, "hiring_startups.csv")
+            save_startups_info_to_csv(hiring_startup_info, "hiring_startups.csv")
             hiring_startups += 1
 
         startups_file.close()
