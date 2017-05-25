@@ -1,6 +1,7 @@
 #!/bin/bash
 
 WORKDIR=/home/zabana/projects/willy
+REQUIREMENTS_FILE=$WORKDIR/requirements.txt
 
 # If the virutalenv folder does not exist, create and activate it.
 if [[ ! -d "./ENV__willy" ]]; then
@@ -21,7 +22,7 @@ fi
 # Remove pkg resource package from requirements.txt
 echo "[log] Removing pkg-resources package from requirements.txt."
 cd "$WORKDIR"
-grep -v "pkg-resources" requirements.txt | tee > requirements.txt
+grep -v "pkg-resources" REQUIREMENTS_FILE | tee REQUIREMENTS_FILE
 cd ~
 echo "[log] Package successfully removed."
 
