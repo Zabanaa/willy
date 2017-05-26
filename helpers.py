@@ -3,6 +3,7 @@ import requests
 from bs4            import BeautifulSoup
 from termcolor      import colored
 from collections    import namedtuple
+from gsheet import insert_row_to_spreadsheet
 
 def soupify_website(site_url=None):
 
@@ -87,3 +88,19 @@ def save_startups_info_to_csv(startup_info, file):
 
     startup_file.close()
     return True
+
+
+def save_startup_jobs_to_google_sheet(csv_file=None):
+
+    with open(csv_file, "r") as hiring_startups_file:
+
+        reader = csv.reader(hiring_startups_file)
+        index  = 1
+
+        print("Saving startups ...")
+        for row in reader:
+            print("Saving startup {} at index {}".format(row[1], index))
+            insert_row_to_spreadsheet.delay(row, index)
+            index += 1
+
+        hiring_startups_file.close()

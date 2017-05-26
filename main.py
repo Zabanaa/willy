@@ -97,5 +97,6 @@ if __name__ == "__main__":
     if not os.path.exists("./startups.csv"):
         build_startups_list()
         get_startup_jobs()
+        save_startup_jobs_to_google_sheet()
     else:
         get_startup_jobs()

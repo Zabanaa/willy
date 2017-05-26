@@ -1,5 +1,8 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from celery import Celery
+
+app     = Celery("tasks", backend="amqp", broker="amqp://localhost//")
 
 # use creds to create a client to interact with the Google Drive API
 scope = ['https://spreadsheets.google.com/feeds']
@@ -10,18 +13,23 @@ client = gspread.authorize(creds)
 # Make sure you use the right name here.
 sheet = client.open("Startups List").sheet1
 
-def save_startup_to_spreadsheet(startup_info, index):
+@app.task
+def insert_row_to_spreadsheet(startup_info, index):
 
     try:
         sheet.insert_row(startup_info, index)
+        print("Inserting Row ...")
     except Exception as e:
         return False
 
-    return True
+    print("Row inserted !")
 
-for i in range(10):
+def delete_rows():
 
-    print("Saving startup {}".format(i))
-    save_startup_to_spreadsheet(["Berlin", "Soundcloud", "Python", "https://weoijqw.com"], i)
-    print("Startup Saved !")
-    print("")
+    try:
+        all_records = sheet.get_all_records()
+    except IndexError as e:
+        print("Worksheet Already Empty")
+        return
+
+    sheet.clear()
