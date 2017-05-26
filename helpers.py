@@ -65,11 +65,16 @@ def startup_is_hiring_software_devs(soup):
                        "back end", "back-end", "software developer",
                        "software engineer"]
 
-    for job_title in job_titles:
+    if jobs_page_body is not None:
 
-        if jobs_page_body is not None and job_title in jobs_page_body:
-            return HiringSWD(hiring=True, job_title=job_title)
-            break
+        for job_title in job_titles:
+
+            if jobs_page_body is not None and job_title in jobs_page_body:
+                return HiringSWD(hiring=True, job_title=job_title)
+                break
+        else:
+            return HiringSWD(hiring=False, job_title=job_title)
+
     else:
         return HiringSWD(hiring=False, job_title=job_title)
 
