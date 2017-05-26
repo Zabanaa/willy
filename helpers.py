@@ -58,14 +58,14 @@ def startup_has_open_jobs(soup):
 def startup_is_hiring_software_devs(soup):
 
     HiringSWD       = namedtuple("HiringSWD", ["hiring", "job_title"])
-    jobs_page_body  = soup.body.text.lower()
 
     job_titles      = [ "python", "nodejs", "node.js", "django", "flask",
                        "full stack", "fullstack", "full stack", "backend",
                        "back end", "back-end", "software developer",
                        "software engineer"]
+    if soup is not None:
 
-    if jobs_page_body is not None:
+        jobs_page_body  = soup.body.text.lower()
 
         for job_title in job_titles:
 
@@ -73,10 +73,10 @@ def startup_is_hiring_software_devs(soup):
                 return HiringSWD(hiring=True, job_title=job_title)
                 break
         else:
-            return HiringSWD(hiring=False, job_title=job_title)
+            return HiringSWD(hiring=False, job_title=None)
 
     else:
-        return HiringSWD(hiring=False, job_title=job_title)
+        return HiringSWD(hiring=False, job_title=None)
 
 def save_startups_info_to_csv(startup_info, file):
 
