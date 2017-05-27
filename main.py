@@ -99,4 +99,9 @@ if __name__ == "__main__":
         get_startup_jobs()
         save_startup_jobs_to_google_sheet()
     else:
-        get_startup_jobs()
+
+        if not os.path.exists("hiring_startups.csv"):
+            get_startup_jobs()
+            save_startup_jobs_to_google_sheet()
+        else:
+            save_startup_jobs_to_google_sheet()
