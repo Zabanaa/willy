@@ -64,7 +64,7 @@ def startup_is_hiring_software_devs(soup):
                        "full stack", "fullstack", "full stack", "backend",
                        "back end", "back-end", "software developer",
                        "software engineer"]
-    if soup is not None:
+    if soup is not None and soup.body is not None:
 
         jobs_page_body  = soup.body.text.lower()
 
