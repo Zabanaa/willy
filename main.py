@@ -68,9 +68,13 @@ def get_startup_jobs():
                 jobs_page_soup          = soupify_website(site_url=jobs_page)
                 pass
             except requests.exceptions.MissingSchema:
-                # jobs page does not start with / ex: jobs.html instead of jobs.html
+                # jobs page does not start with a slash ex: jobs.html instead of jobs.html
                 jobs_page = "{}/{}".format(startup_site, jobs_page)
                 jobs_page_soup          = soupify_website(site_url=jobs_page)
+            except requests.exceptions.InvalidSchema as e:
+                error = "Invalid Schema Error: {}".format(e)
+                print(colored(error, "red"))
+                continue
             except requests.exceptions.ConnectionError:
                 error = "Could not connect to {}. URL: {}".format(startup_name, jobs_page)
                 print(colored(error, "red"))
