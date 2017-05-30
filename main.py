@@ -89,6 +89,10 @@ def get_startup_jobs():
                 error = "Could not connect to {}. URL: {}".format(startup_name, jobs_page)
                 logger.error(colored(error, "red"))
                 continue
+            except requests.exceptions.TooManyRedirects:
+                error = "Too many redirects for {}".format(jobs_page)
+                logger.error(colored(error, "red"))
+                continue
 
             hiring_swd, job_title   = startup_is_hiring_software_devs(jobs_page_soup)
 
