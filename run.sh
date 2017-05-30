@@ -2,6 +2,7 @@
 
 WORKDIR=/home/zabana/projects/willy
 REQUIREMENTS_FILE=$WORKDIR/requirements.txt
+LOG_FILE=/var/log/willy.log
 
 # If the virutalenv folder does not exist, create and activate it.
 if [[ ! -d "./ENV__willy" ]]; then
@@ -37,6 +38,17 @@ cd "$WORKDIR"
 pip install -r requirements.txt
 cd ~
 echo "[log] Dependencies downloaded !"
+
+# Create the logfile if it does not exist
+if [[ ! -f "$LOG_FILE" ]]; then
+    echo "[log] Creating log file ..."
+    sudo touch "$LOG_FILE"
+    echo "[log] Done!"
+
+    echo "[log] Adjusting permissions ..."
+    sudo chmod 666 "$LOG_FILE"
+    echo "[log] Done!"
+fi
 
 # nohup the shit out of the app
 echo "[log] Running Script ... "
