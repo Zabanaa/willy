@@ -8,7 +8,7 @@ from gsheet import insert_row_to_spreadsheet
 def soupify_website(site_url=None):
 
     if site_url is not None:
-        sauce   = requests.get(site_url).text
+        sauce   = requests.get(site_url, timeout=20).text
         return BeautifulSoup(sauce, "html.parser")
     else:
         raise ValueError("Argument site_url is required.")
