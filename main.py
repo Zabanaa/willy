@@ -1,8 +1,15 @@
 #!/home/zabana/projects/willy/ENV__willy/bin/python
 
-import csv
-import os
+import csv, os, logging
 from helpers import *
+
+logger          = logging.getLogger("Willy")
+logger.setLevel(logging.INFO)
+file_handler    = logging.FileHandler("/var/log/willy.log")
+formatter       = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 def build_startups_list():
 
@@ -49,6 +56,9 @@ def get_startup_jobs():
             startup_site  = startup[1]
             startup_city  = startup[2]
 
+            log_msg = "Getting info for {} ({}) in {}"
+            logger.info(log_msg.format(startup_name, startup_site, startup_city))
+
             try:
                 startup_soup = soupify_website(site_url=startup_site)
             except requests.exceptions.ConnectionError:
@@ -73,11 +83,11 @@ def get_startup_jobs():
                 jobs_page_soup          = soupify_website(site_url=jobs_page)
             except requests.exceptions.InvalidSchema as e:
                 error = "Invalid Schema Error: {}".format(e)
-                print(colored(error, "red"))
+                logger.error(colored(error, "red"))
                 continue
             except requests.exceptions.ConnectionError:
                 error = "Could not connect to {}. URL: {}".format(startup_name, jobs_page)
-                print(colored(error, "red"))
+                logger.error(colored(error, "red"))
                 continue
 
             hiring_swd, job_title   = startup_is_hiring_software_devs(jobs_page_soup)
