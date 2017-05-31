@@ -77,20 +77,24 @@ def get_startup_jobs():
             try:
                 jobs_page_soup          = soupify_website(site_url=jobs_page)
                 pass
-            except requests.exceptions.MissingSchema:
+            except:
                 continue
-            except requests.exceptions.InvalidSchema as e:
-                error = "Invalid Schema Error: {}".format(e)
-                logger.error(colored(error, "red"))
-                continue
-            except requests.exceptions.ConnectionError:
-                error = "Could not connect to {}. URL: {}".format(startup_name, jobs_page)
-                logger.error(colored(error, "red"))
-                continue
-            except requests.exceptions.TooManyRedirects:
-                error = "Too many redirects for {}".format(jobs_page)
-                logger.error(colored(error, "red"))
-                continue
+            # except requests.exceptions.ContentDecodingError:
+            #     continue
+            # except requests.exceptions.MissingSchema:
+            #     continue
+            # except requests.exceptions.InvalidSchema as e:
+            #     error = "Invalid Schema Error: {}".format(e)
+            #     logger.error(colored(error, "red"))
+            #     continue
+            # except requests.exceptions.ConnectionError:
+            #     error = "Could not connect to {}. URL: {}".format(startup_name, jobs_page)
+            #     logger.error(colored(error, "red"))
+            #     continue
+            # except requests.exceptions.TooManyRedirects:
+            #     error = "Too many redirects for {}".format(jobs_page)
+            #     logger.error(colored(error, "red"))
+            #     continue
 
             hiring_swd, job_title   = startup_is_hiring_software_devs(jobs_page_soup)
 
