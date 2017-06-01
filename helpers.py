@@ -104,3 +104,4 @@ def save_startup_jobs_to_google_sheet(csv_file=None):
             index += 1
 
         hiring_startups_file.close()
+        print("Done !")
