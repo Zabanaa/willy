@@ -79,22 +79,6 @@ def get_startup_jobs():
                 pass
             except:
                 continue
-            # except requests.exceptions.ContentDecodingError:
-            #     continue
-            # except requests.exceptions.MissingSchema:
-            #     continue
-            # except requests.exceptions.InvalidSchema as e:
-            #     error = "Invalid Schema Error: {}".format(e)
-            #     logger.error(colored(error, "red"))
-            #     continue
-            # except requests.exceptions.ConnectionError:
-            #     error = "Could not connect to {}. URL: {}".format(startup_name, jobs_page)
-            #     logger.error(colored(error, "red"))
-            #     continue
-            # except requests.exceptions.TooManyRedirects:
-            #     error = "Too many redirects for {}".format(jobs_page)
-            #     logger.error(colored(error, "red"))
-            #     continue
 
             hiring_swd, job_title   = startup_is_hiring_software_devs(jobs_page_soup)
 
@@ -114,14 +98,17 @@ def get_startup_jobs():
 
 if __name__ == "__main__":
 
-    if not os.path.exists("./startups.csv"):
+    startups_list_file      = "startups.csv"
+    hiring_startups_file    = "hiring_startups.csv"
+
+    if not os.path.exists(startups_list_file):
         build_startups_list()
         get_startup_jobs()
-        save_startup_jobs_to_google_sheet()
+        save_startup_jobs_to_google_sheet(csv_file=hiring_startups_file)
     else:
 
-        if not os.path.exists("hiring_startups.csv"):
+        if not os.path.exists(hiring_startups_file):
             get_startup_jobs()
-            save_startup_jobs_to_google_sheet()
+            save_startup_jobs_to_google_sheet(csv_file=hiring_startups_file)
         else:
-            save_startup_jobs_to_google_sheet()
+            save_startup_jobs_to_google_sheet(csv_file=hiring_startups_file)
